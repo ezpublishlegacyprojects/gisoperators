@@ -25,14 +25,14 @@
 // of this licencing isn't clear to you.
 //
 
-define('TOP_AUTHORS_FOLDER','gisoperators');
+define('GIS_OPERATORS_FOLDER','gisoperators');
 
 // Operator autoloading
 
 $eZTemplateOperatorArray = array();
 
 $eZTemplateOperatorArray[] =
-  array( 'script' => eZExtension::baseDirectory() . '/' . TOP_AUTHORS_FOLDER . '/autoloads/gisoperators.php',
+  array( 'script' => eZExtension::baseDirectory() . '/' . GIS_OPERATORS_FOLDER . '/autoloads/gisoperators.php',
          'class' => 'GISOperators',
          'operator_names' => array( 'gisrange') );
          
