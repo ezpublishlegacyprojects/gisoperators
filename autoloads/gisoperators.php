@@ -124,7 +124,7 @@ class GISOperators
                                     ezgis_position 
 
                                 WHERE 
-                                    ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) <= 200 
+                                    ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) <= ".$range ."
                                     AND ezcontentobject_tree.contentobject_id = ezcontentobject.id
                                     AND ezcontentobject.id = ezcontentobject_attribute.contentobject_id
                                     AND ezcontentobject.current_version = ezcontentobject_attribute.version
