@@ -3,9 +3,9 @@
 
 <div style="border: 1px solid #ff0000; padding: 20px;">
 <form action={"/"|ezurl} method="post">
-    Brennholz-Händler Suche (PLZ oder Ort)
+    Ihr Standort:
      <input class="halfbox" type="text" size="20" name="SearchText" id="Search" value="{$search_text|wash}" />
-    <input class="button" name="SearchButton" type="submit" value="{'Search'|i18n('design/base')}" /><br/>
+     <input class="button" name="SearchButton" type="submit" value="Händler im Umkreis suchen" /><br/>
 
     Umkreis:
     <input type="radio" name="range" value="10" {if eq($range,'10')}checked{/if}>10 km</input>
