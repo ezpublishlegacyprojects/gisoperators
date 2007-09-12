@@ -29,6 +29,7 @@
 // of this licencing isn't clear to you.
 //
 
+include_once( "lib/ezutils/classes/ezdebug.php" );
 include_once( "lib/ezxml/classes/ezxml.php" );
 include_once( "extension/gisoperators/classes/googlegeocoder.php" );
 
@@ -39,7 +40,7 @@ class GISOperators
     */
     function GISOperators()
     {
-        $this->Operators = array( 'gisrange');
+        $this->Operators = array( 'gisrange','gisposition');
     }
 
     /*!
@@ -66,14 +67,13 @@ class GISOperators
     */
     function namedParameterList()
     {
-        return array( 'gisrange' => array( 'searchString' => array( 'type' => 'int',
-                                                                  'required' => true,
-                                                                  'default' => '' ),
-                                             'range' => array ( 'type' => 'int',
-                                                                 'required' => true,
-                                                                 'default' => '50' ),
-                                                                ) 
-                        );
+        return array( 'gisrange' => array( 'searchString' => array( 'type' => 'string',
+                                                                                   'required' => true ),
+                                                     'range' =>       array( 'type' => 'int',
+                                                                                   'required' => true ) ), 
+                          'gisposition' => array( 'searchString' => array( 'type' => 'string',
+                                                                                   'required' => true ) )
+                        );    
     }
 
     /*!
@@ -104,9 +104,9 @@ class GISOperators
                     $range = $namedParameters['range'];
 
                     // Query berechnet Orthodrome Entfernung zwischen gegebenen Punkt und aller in der Datenbank vorhandenen Geodaten
-                    // Abweichung beträgt etwa 20km auf 8000km (Entfernung Berlin -> Tokio), da die Formel von der Erde als runde Kugel ausgeht
+                    // Abweichung beträgt etwa 50km auf 8000km (Entfernung Berlin -> Tokio), da die Formel von der Erde als runde Kugel ausgeht
                     // und nicht das GRS80-Ellipsoid Modell zugrunde legt.
-                    //$query="SELECT street, zip, city, state, country, ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) AS Distance FROM ezgis_position WHERE ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) <= ".$range." ORDER BY Distance";
+                    //$query=SELECT street, zip, city, state, country, ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) AS Distance FROM ezgis_position WHERE ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) <= ".$range." ORDER BY Distance";
                     $query="SELECT                                     
                                     ezcontentobject_tree.node_id,
                                     ezcontentobject.id, 
@@ -115,7 +115,7 @@ class GISOperators
                                     ezgis_position.city, 
                                     ezgis_position.state, 
                                     ezgis_position.country,
-                                    ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) AS Distance 
+                                    ".$radius."*ACOS(cos(RADIANS(latitude))*cos(".$theta.")*(sin(RADIANS(longitude))*sin(".$phi.")+cos(RADIANS(longitude))*cos(".$phi."))+sin(RADIANS(latitude))*sin(".$theta.")) AS Distance
 
                                 FROM 
                                     ezcontentobject_tree,
@@ -137,10 +137,36 @@ class GISOperators
                 }
                 else 
                 {
+                    eZDebug::writeError( "gisrange: Google returned statuscode: ". $geocode->statuscode);
                     $operatorValue = false;
                 }
+                return;
                 
-            } break;
+            } break;   
+                      
+                      
+            case 'gisposition':
+            {
+
+                $geocode = new GoogleGeoCoder();
+                $geocode->request($namedParameters['searchString']);
+                
+                //var_dump($geocode);
+                
+                if ($geocode->statuscode == "200")
+                {                
+                    $operatorValue['longitude'] = $geocode->longitude;
+                    $operatorValue['latitude'] = $geocode->latitude;
+                }
+                else 
+                {
+                    eZDebug::writeError( "gisposition: Google returned statuscode: ". $geocode->statuscode);
+                    $operatorValue = false;
+                }
+
+            } break;    
+            
+            
         }
     }
 

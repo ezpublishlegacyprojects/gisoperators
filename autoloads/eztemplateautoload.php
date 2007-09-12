@@ -34,7 +34,7 @@ $eZTemplateOperatorArray = array();
 $eZTemplateOperatorArray[] =
   array( 'script' => eZExtension::baseDirectory() . '/' . GIS_OPERATORS_FOLDER . '/autoloads/gisoperators.php',
          'class' => 'GISOperators',
-         'operator_names' => array( 'gisrange') );
+         'operator_names' => array( 'gisrange','gisposition') );
          
 
 ?>
