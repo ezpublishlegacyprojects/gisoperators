@@ -4,8 +4,6 @@
 //
 // GISOperators Methods
 //
-// Created on: <08-Sep-2007 00:08:00 Norman Leutner>
-// Last Updated: <08-Sep-2007 00:14:58 Norman Leutner>
 // Version: 0.0.1
 //
 // Copyright (C) 2001-2007 all2e GmbH. All rights reserved.
