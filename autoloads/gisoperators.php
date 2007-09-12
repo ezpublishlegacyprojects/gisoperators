@@ -85,6 +85,16 @@ class GISOperators
     {
         switch ( $operatorName )
         {
+            /* GISrage searchs for objects within a given range and returns:
+                    ezcontentobject_tree.node_id,
+                    ezcontentobject.id,
+                    ezgis_position.street,
+                    ezgis_position.zip,
+                    ezgis_position.city,
+                    ezgis_position.state,
+                    ezgis_position.country,
+            The search_text may contain any address information like street country,...
+            Return false if no valid data is found. */
             case 'gisrange':
             {
                         
@@ -144,7 +154,7 @@ class GISOperators
                 
             } break;   
                       
-                      
+            /* This function will perform a search and returns the latitude ang longitude of the search result. */
             case 'gisposition':
             {
 
